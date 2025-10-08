@@ -1,11 +1,7 @@
-﻿using Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Infrastructure.Models;
+using Infrastructure.Services;
 
-namespace Presentation.Console;
+namespace Presentation.ConsoleApp;
 
 internal class MainDialog(IProductService productService)
 {
@@ -15,5 +11,12 @@ internal class MainDialog(IProductService productService)
     public void Show()
     {
 
+    }
+
+    private async Task Add()
+    {
+        var productRequest = new ProductRequest();
+
+        Console.WriteLine("##### NEW PRODUCT #####");
     }
 }

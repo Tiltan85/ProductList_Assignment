@@ -2,7 +2,7 @@
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Presentation.Console;
+using Presentation.ConsoleApp;
 
 IHost host = Host.CreateDefaultBuilder()
     .ConfigureServices(services => 
