@@ -15,4 +15,4 @@ IHost host = Host.CreateDefaultBuilder()
     .Build();
 
 var main = host.Services.GetRequiredService<MainDialog>();
-main.Show();
+await main.Show();
