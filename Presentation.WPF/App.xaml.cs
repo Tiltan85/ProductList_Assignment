@@ -23,5 +23,6 @@ public partial class App : Application
         base.OnStartup(e);
 
         var main = host.Services.GetRequiredService<MainWindow>();
+        main.Show();
     }
 }
