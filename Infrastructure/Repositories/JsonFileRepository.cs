@@ -5,13 +5,12 @@ using System.Text.Json.Schema;
 
 namespace Infrastructure.Repositories;
 
-public interface IFileRepositories
-{
+public interface IJsonFileRepository{
     Task WriteAsync(IEnumerable<Product> products, CancellationToken cancellationToken = default);
     ValueTask<IReadOnlyList<Product>> ReadAsync(CancellationToken cancellationToken = default);
 }
 
-public class FileRepository : IFileRepositories
+public class JsonFileRepository : IJsonFileRepository
 {
 
     private readonly string _filePath = null!;
@@ -21,7 +20,7 @@ public class FileRepository : IFileRepositories
     };
 
     // Konstruktor, tar hand om sökvägen till filen samt ser till att filen finns direkt om man vill använda sig av FileRepository.
-    public FileRepository(string fileName = "data.json")
+    public JsonFileRepository(string fileName = "data.json")
     {
         var baseDirectory = AppContext.BaseDirectory;
         var dataDirectory = Path.Combine(baseDirectory, "Data");
