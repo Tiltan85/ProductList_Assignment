@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Infrastructure.Models;
+using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
@@ -11,17 +12,34 @@ public partial class ProductListViewModel : ObservableObject
 {
 
     private readonly IServiceProvider _serviceProvider;
+    private readonly IProductService _productService;
 
-    public ProductListViewModel(IServiceProvider serviceProvider)
+    public ProductListViewModel(IServiceProvider serviceProvider, IProductService productService)
     {
         _serviceProvider = serviceProvider;
+        _productService = productService;
+
+        LoadCommand = new AsyncRelayCommand(LoadProductListAsync);
+        _ = LoadCommand.ExecuteAsync(null);
+
     }
+
+    public IAsyncRelayCommand LoadCommand { get; }
 
     [ObservableProperty]
     private string _title = "Product List";
 
     [ObservableProperty]
     private ObservableCollection<Product> _productList = [];
+
+
+    private async Task LoadProductListAsync(CancellationToken cancellationToken = default)
+    {
+        var productResult = await _productService.GetProductAsync(cancellationToken);
+
+        if (productResult.Content != null)
+            ProductList = new ObservableCollection<Product>(productResult.Content);
+    }
 
     [RelayCommand]
     private void NavigateToAddView()

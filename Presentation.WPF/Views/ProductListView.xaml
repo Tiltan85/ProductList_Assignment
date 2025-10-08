@@ -37,8 +37,26 @@
                     HorizontalAlignment="Right"/>
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding ProductList}">
-            
+        <ListView Grid.Row="1" ItemsSource="{Binding ProductList}" HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:Product}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ProductName}" FontWeight="Bold" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ProductPrice}" />
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
         
         
