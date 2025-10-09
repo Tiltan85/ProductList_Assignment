@@ -2,7 +2,7 @@
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Presentation.Console;
+using Presentation.ConsoleApp;
 
 IHost host = Host.CreateDefaultBuilder()
     .ConfigureServices(services => 
@@ -15,4 +15,4 @@ IHost host = Host.CreateDefaultBuilder()
     .Build();
 
 var main = host.Services.GetRequiredService<MainDialog>();
-main.Show();
+await main.Show();
