@@ -44,6 +44,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -51,8 +52,10 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ProductName}" FontWeight="Bold" />
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ProductPrice}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Category.CategoryName}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manufacturer.ManufacturerName}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
 
                     </Grid>
                 </DataTemplate>
