@@ -6,7 +6,7 @@ public class Product
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string ProductName { get; set; } = null!;
     public string ProductDescription { get; set; } = null!;
-    public string ProductCategory { get; set; } = null!;    // Ska vara en ny klass
-    public string ProductBrand { get; set; } = null!;        // Ska vara en ny klass
+    public Category Category { get; set; } = null!;
+    public Brand Brand { get; set; } = null!;
     public decimal ProductPrice { get; set; }
 }
