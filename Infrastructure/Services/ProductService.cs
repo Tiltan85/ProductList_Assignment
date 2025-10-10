@@ -10,6 +10,7 @@ public interface IProductService
     Task<ProductObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default);
     Task<ProductObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default);
     Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default);
+    Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default);
 }
 
 public class ProductService(IJsonFileRepository jsonFileRepository) : IProductService
@@ -125,5 +126,27 @@ public class ProductService(IJsonFileRepository jsonFileRepository) : IProductSe
             return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
         }
 
+    }
+
+
+    public async Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        if (product == null) 
+        {
+            return new ProductResult { Success = false, StatusCode = 500, Error = "Product not found" };
+        }
+
+        try
+        {
+            _products = _products.Where(p => p.Id != product.Id).ToList();
+            //_products.Remove(product);
+            await _jsonFileRepository.WriteAsync(_products, cancellationToken);
+
+            return new ProductResult { Success = true, StatusCode = 200 };
+        }
+        catch (Exception ex) 
+        {
+            return new ProductResult { Success = false, StatusCode=500, Error = ex.Message };
+        }
     }
 }

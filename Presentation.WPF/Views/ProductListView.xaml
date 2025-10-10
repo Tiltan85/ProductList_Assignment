@@ -49,6 +49,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ProductName}" FontWeight="Bold" />
@@ -57,6 +58,12 @@
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manufacturer.ManufacturerName}" />
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
 
+                        <StackPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Right" >
+                        
+                        <Button Content="Delete" 
+                                CommandParameter="{Binding .}"
+                                Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
