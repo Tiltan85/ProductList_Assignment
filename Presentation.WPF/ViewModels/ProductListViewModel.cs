@@ -30,7 +30,7 @@ public partial class ProductListViewModel : ObservableObject
     private string _title = "Product List";
 
     [ObservableProperty]
-    private ObservableCollection<Product> _productList = [];
+    private ObservableCollection<Product> _productList = new();
 
 
     private async Task LoadProductListAsync(CancellationToken cancellationToken = default)
@@ -42,9 +42,22 @@ public partial class ProductListViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task Delete(Product product, CancellationToken cancellationToken = default)
+    {
+        
+        System.Diagnostics.Debug.WriteLine($"DeleteProductAsync called. product = {(product == null ? "null" : product.Id)}");
+        if (product == null) return;
+
+        var productResult = await _productService.DeleteProductAsync(product, cancellationToken);
+        await LoadProductListAsync (cancellationToken);
+
+    }
+
+    [RelayCommand]
     private void NavigateToAddView()
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductAddViewModel>();
     }
+    
 }
