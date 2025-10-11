@@ -86,55 +86,57 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
     public async Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default)
     {
+        var result = _inputValidationService.VerifyProductForm(productRequest);
 
-        
-
-        try
+        if (result.Success)
         {
-            // EnsureLoaded efter kontroll om giltig input
-            await EnsureLoadedAsync(cancellationToken);
-
-            var product = new Product
+            try
             {
-                Id = Guid.NewGuid().ToString(),
-                ProductName = productRequest.ProductName,
-                ProductPrice = productRequest.ProductPrice,
-                ProductDescription = productRequest.ProductDescription,
-                Category = new Category { CategoryName = productRequest.Category },
-                Manufacturer = new Manufacturer { ManufacturerName = productRequest.Manufacturer },
-            };
+                // EnsureLoaded efter kontroll om giltig input
+                await EnsureLoadedAsync(cancellationToken);
 
-            // TODO ProductDuplicationCheck (kolla så där inte redan finns en product med samma Id, och namn)
+                var product = new Product
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ProductName = productRequest.ProductName,
+                    ProductPrice = productRequest.ProductPrice,
+                    ProductDescription = productRequest.ProductDescription,
+                    Category = new Category { CategoryName = productRequest.Category },
+                    Manufacturer = new Manufacturer { ManufacturerName = productRequest.Manufacturer },
+                };
 
-            _products.Add(product);
-            await _jsonFileRepository.WriteAsync(_products, cancellationToken);
+                // TODO ProductDuplicationCheck (kolla så där inte redan finns en product med samma Id, och namn)
 
-            return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
+                _products.Add(product);
+                await _jsonFileRepository.WriteAsync(_products, cancellationToken);
+
+                return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
+            }
+            catch (Exception ex)
+            {
+                return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
+            }
         }
-        catch (Exception ex)
-        {
-            return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
-        }
+        return new ProductResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors };
     }
 
     public async Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
     {
-
         var result = _inputValidationService.VerifyProductForm(product);
 
         if (result.Success)
         {
             try
             {
-                var existing_product = await GetProductByIdAsync(product.Id, cancellationToken);
+                var existingProduct = await GetProductByIdAsync(product.Id, cancellationToken);
 
-                if (existing_product.Content is not null)
+                if (existingProduct.Content is not null)
                 {
-                    existing_product.Content.ProductName = product.ProductName;
-                    existing_product.Content.ProductDescription = product.ProductDescription;
-                    existing_product.Content.Category = product.Category;
-                    existing_product.Content.Manufacturer = product.Manufacturer;
-                    existing_product.Content.ProductPrice = product.ProductPrice;
+                    existingProduct.Content.ProductName = product.ProductName;
+                    existingProduct.Content.ProductDescription = product.ProductDescription;
+                    existingProduct.Content.Category = product.Category;
+                    existingProduct.Content.Manufacturer = product.Manufacturer;
+                    existingProduct.Content.ProductPrice = product.ProductPrice;
 
                     // TODO ProductDuplicationCheck (kolla så där inte redan finns en product med samma Id, och namn)
 
@@ -143,7 +145,6 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
                     return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
                 }
-
                 return new ProductResult { Success = false, StatusCode = 404, Error = "Product not found" };
 
             }
@@ -152,7 +153,6 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                 return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
-
         return new ProductResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors};
     }
 

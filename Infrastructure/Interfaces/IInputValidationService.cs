@@ -5,5 +5,6 @@ namespace Infrastructure.Interfaces
     public interface IInputValidationService
     {
         InputResult VerifyProductForm(Product product);
+        InputResult VerifyProductForm(ProductRequest productRequest);
     }
 }
