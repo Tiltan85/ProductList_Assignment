@@ -10,7 +10,9 @@ public interface IProductService
     Task<ProductObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default);
     Task<ProductObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default);
     Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default);
+    Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default);
     Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default);
+    //Task<ProductResult> VerifyProduct(ProductRequest productRequest);
 }
 
 public class ProductService(IJsonFileRepository jsonFileRepository) : IProductService
@@ -125,9 +127,38 @@ public class ProductService(IJsonFileRepository jsonFileRepository) : IProductSe
         {
             return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
         }
-
     }
 
+    public async Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        if (product == null)
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Invalid Input" }; // 400 Bad Request, Fel input från användaren
+
+        try
+        {
+            var existing_product = await GetProductByIdAsync(product.Id, cancellationToken);
+
+            if (existing_product.Content is not null)
+            {
+                existing_product.Content.ProductName = product.ProductName;
+                existing_product.Content.ProductDescription = product.ProductDescription;
+                existing_product.Content.Category = product.Category;
+                existing_product.Content.Manufacturer = product.Manufacturer;
+                existing_product.Content.ProductPrice = product.ProductPrice;
+
+                await _jsonFileRepository.WriteAsync(_products, cancellationToken);
+
+                return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
+            }
+
+            return new ProductResult { Success = false, StatusCode = 404, Error = "Product not found" };
+
+        }
+        catch (Exception ex)
+        {
+            return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
+        }
+    }
 
     public async Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
     {
