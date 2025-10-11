@@ -23,6 +23,9 @@ public partial class App : Application
         services.AddTransient<ProductAddViewModel>();
         services.AddTransient<ProductAddView>();
 
+        services.AddSingleton<ProductEditViewModel>();
+        services.AddSingleton<ProductEditView>();
+
         services.AddTransient<ProductListViewModel>();
         services.AddTransient<ProductListView>();
 

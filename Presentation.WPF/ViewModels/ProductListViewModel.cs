@@ -42,6 +42,16 @@ public partial class ProductListViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void Edit(Product product)
+    {
+        var editViewModel = _serviceProvider.GetRequiredService<ProductEditViewModel>();
+        editViewModel.SetProduct(product);
+        
+        var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+        mainViewModel.CurrentViewModel = editViewModel;
+    }
+
+    [RelayCommand]
     private async Task Delete(Product product, CancellationToken cancellationToken = default)
     {
         
@@ -49,8 +59,8 @@ public partial class ProductListViewModel : ObservableObject
         if (product == null) return;
 
         var productResult = await _productService.DeleteProductAsync(product, cancellationToken);
+        // TODO Error message if fail
         await LoadProductListAsync (cancellationToken);
-
     }
 
     [RelayCommand]
@@ -59,5 +69,4 @@ public partial class ProductListViewModel : ObservableObject
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductAddViewModel>();
     }
-    
 }
