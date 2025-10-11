@@ -1,0 +1,51 @@
+﻿
+using Infrastructure.Models;
+
+namespace Infrastructure.Services;
+
+public class InputValidationService
+{
+    public InputResult VerifyProductForm(Product product)
+    {
+        var result = new InputResult();
+
+        if (product == null)
+        {
+            result.Success = false;
+            result.StatusCode = 400; // 400 Bad Request, Fel input från användaren
+            result.Error = "Product edit form is empty";
+            return result;
+        }
+        if (string.IsNullOrWhiteSpace(product.Id))
+            result.FieldErrors.Add(new InputError { Field = "Id", Message = "Product Id is missing, try reload form." });
+
+        if (string.IsNullOrWhiteSpace(product.ProductName))
+            result.FieldErrors.Add(new InputError { Field = "Name", Message = "Product name can't be empty." });
+
+        if (string.IsNullOrWhiteSpace(product.ProductDescription))
+            result.FieldErrors.Add(new InputError { Field = "Description", Message = "Product description can't be empty." });
+
+        if (string.IsNullOrWhiteSpace(product.Category.CategoryName))
+            result.FieldErrors.Add(new InputError { Field = "Category", Message = "Product category can't be empty." });
+
+        if (string.IsNullOrWhiteSpace(product.Manufacturer.ManufacturerName))
+            result.FieldErrors.Add(new InputError { Field = "Manufacturer", Message = "Product manufacturer can't be empty." });
+
+        if (product.ProductPrice < 0)
+            result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product pricec can't be negative value." });
+
+        if (result.FieldErrors.Count > 0)
+        {
+            result.Success = false;
+            result.StatusCode = 400;
+            result.Error = "Fields have errors.";
+        }  
+        else
+        {
+            result.Success = true;
+            result.StatusCode = 204;
+        }
+
+        return result;
+    }
+}
