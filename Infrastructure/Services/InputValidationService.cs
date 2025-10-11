@@ -1,9 +1,10 @@
 ﻿
+using Infrastructure.Interfaces;
 using Infrastructure.Models;
 
 namespace Infrastructure.Services;
 
-public class InputValidationService
+public class InputValidationService : IInputValidationService
 {
     public InputResult VerifyProductForm(Product product)
     {
@@ -39,7 +40,7 @@ public class InputValidationService
             result.Success = false;
             result.StatusCode = 400;
             result.Error = "Fields have errors.";
-        }  
+        }
         else
         {
             result.Success = true;

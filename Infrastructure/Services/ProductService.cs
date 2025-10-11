@@ -1,4 +1,5 @@
 ﻿
+using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 
@@ -15,9 +16,10 @@ public interface IProductService
     Task<ProductResult> VerifyProductFormInput(ProductRequest productRequest);
 }
 
-public class ProductService(IJsonFileRepository jsonFileRepository) : IProductService
+public class ProductService(IJsonFileRepository jsonFileRepository, IInputValidationService inputValidationService) : IProductService
 {
     private readonly IJsonFileRepository _jsonFileRepository = jsonFileRepository;
+    private readonly IInputValidationService _inputValidationService = inputValidationService;
     private List<Product> _products = [];
     private bool _loaded;
 
@@ -86,6 +88,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository) : IProductSe
     public async Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default)
     {
 
+        
 
         try
         {
