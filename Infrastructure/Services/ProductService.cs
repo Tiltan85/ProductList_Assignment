@@ -1,4 +1,5 @@
 ﻿
+using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
 
@@ -12,12 +13,13 @@ public interface IProductService
     Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default);
     Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default);
     Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default);
-    //Task<ProductResult> VerifyProduct(ProductRequest productRequest);
+    Task<ProductResult> VerifyProductFormInput(ProductRequest productRequest);
 }
 
-public class ProductService(IJsonFileRepository jsonFileRepository) : IProductService
+public class ProductService(IJsonFileRepository jsonFileRepository, IInputValidationService inputValidationService) : IProductService
 {
     private readonly IJsonFileRepository _jsonFileRepository = jsonFileRepository;
+    private readonly IInputValidationService _inputValidationService = inputValidationService;
     private List<Product> _products = [];
     private bool _loaded;
 
@@ -85,23 +87,8 @@ public class ProductService(IJsonFileRepository jsonFileRepository) : IProductSe
 
     public async Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default)
     {
-        if (productRequest == null)
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Invalid Input" }; // 400 Bad Request, Fel input från användaren
+
         
-        if (string.IsNullOrWhiteSpace(productRequest.ProductName))
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Product name can't be empty" };
-
-        if (string.IsNullOrWhiteSpace(productRequest.ProductDescription))
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Product description can't be empty" };
-
-        if (string.IsNullOrWhiteSpace(productRequest.Category))
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Product category can't be empty" };
-
-        if (string.IsNullOrWhiteSpace(productRequest.Manufacturer))
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Product manufacturer can't be empty" };
-
-        if (productRequest.ProductPrice < 0)
-            return new ProductResult { Success = false, StatusCode = 400, Error = "Product price can't be negative" };
 
         try
         {
@@ -179,5 +166,28 @@ public class ProductService(IJsonFileRepository jsonFileRepository) : IProductSe
         {
             return new ProductResult { Success = false, StatusCode=500, Error = ex.Message };
         }
+    }
+
+    public async Task<ProductResult> VerifyProductFormInput(ProductRequest productRequest)
+    {
+        if (productRequest == null)
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Invalid Input" }; // 400 Bad Request, Fel input från användaren
+
+        if (string.IsNullOrWhiteSpace(productRequest.ProductName))
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Product name can't be empty" };
+
+        if (string.IsNullOrWhiteSpace(productRequest.ProductDescription))
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Product description can't be empty" };
+
+        if (string.IsNullOrWhiteSpace(productRequest.Category))
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Product category can't be empty" };
+
+        if (string.IsNullOrWhiteSpace(productRequest.Manufacturer))
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Product manufacturer can't be empty" };
+
+        if (productRequest.ProductPrice < 0)
+            return new ProductResult { Success = false, StatusCode = 400, Error = "Product price can't be negative" };
+
+        return new ProductResult { Success = true, StatusCode = 204 };
     }
 }
