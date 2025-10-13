@@ -16,6 +16,9 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     private string _title = "Edit Product";
 
     [ObservableProperty]
+    private Dictionary<string, string> _fieldErrors = [];
+
+    [ObservableProperty]
     private Product _productEditForm = new();
 
     public void SetProduct(Product product)
@@ -34,7 +37,6 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     [RelayCommand]
     private async Task Save()
     {
-
         var productResult = await _productService.EditProductAsync(ProductEditForm);
         if (productResult.Success)
         {
@@ -43,15 +45,14 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
         }
-
-        //TODO Error message
+        FieldErrors = productResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
     }
-
 
     [RelayCommand]
     private void Cancel()
     {
         ProductEditForm = new();
+        FieldErrors.Clear();
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();

@@ -92,7 +92,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         {
             try
             {
-                // EnsureLoaded efter kontroll om giltig input
+                // EnsureLoaded efter kontroll om giltig input. Onödigt att hämta om man har fel i formuläret
                 await EnsureLoadedAsync(cancellationToken);
 
                 var product = new Product
@@ -153,6 +153,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                 return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
+        
         return new ProductResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors};
     }
 
