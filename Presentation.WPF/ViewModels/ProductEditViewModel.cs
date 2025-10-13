@@ -16,6 +16,9 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     private string _title = "Edit Product";
 
     [ObservableProperty]
+    private string? _error;
+
+    [ObservableProperty]
     private Dictionary<string, string> _fieldErrors = [];
 
     [ObservableProperty]
@@ -37,15 +40,16 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     [RelayCommand]
     private async Task Save()
     {
-        var productResult = await _productService.EditProductAsync(ProductEditForm);
-        if (productResult.Success)
+        var editResult = await _productService.EditProductAsync(ProductEditForm);
+        if (editResult.Success)
         {
             ProductEditForm = new();
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
         }
-        FieldErrors = productResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
+        Error = editResult.Error;
+        FieldErrors = editResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
     }
 
     [RelayCommand]

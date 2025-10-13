@@ -101,12 +101,17 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                     ProductName = productRequest.ProductName,
                     ProductPrice = productRequest.ProductPrice,
                     ProductDescription = productRequest.ProductDescription,
-                    Category = new Category { CategoryName = productRequest.Category },
-                    Manufacturer = new Manufacturer { ManufacturerName = productRequest.Manufacturer },
+                    Category = new Category { CategoryName = productRequest.Category.CategoryName },
+                    Manufacturer = new Manufacturer { ManufacturerName = productRequest.Manufacturer.ManufacturerName },
                 };
 
-                // TODO ProductDuplicationCheck (kolla så där inte redan finns en product med samma Id, och namn)
-
+                // Check if the new name exists, Returns false if it exists
+                var existing = ProductNotExistCheck(product);
+                if (!existing.Success)
+                {
+                    return new ProductResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
+                }
+                
                 _products.Add(product);
                 await _jsonFileRepository.WriteAsync(_products, cancellationToken);
 
@@ -122,6 +127,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
     public async Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
     {
+        // Check if Edit for is valid
         var result = _inputValidationService.VerifyProductForm(product);
 
         if (result.Success)
@@ -132,13 +138,22 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
                 if (existingProduct.Content is not null)
                 {
+                    // If the new name is NOT equal the old name
+                    if (!existingProduct.Content.ProductName.Equals(product.ProductName))
+                    {
+                        // Check if the new name exists, Returns false if it exists
+                        var existing = ProductNotExistCheck(existingProduct.Content);
+                        if (!existing.Success)
+                        {
+                            return new ProductResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
+                        }
+                    }
+
                     existingProduct.Content.ProductName = product.ProductName;
                     existingProduct.Content.ProductDescription = product.ProductDescription;
                     existingProduct.Content.Category = product.Category;
                     existingProduct.Content.Manufacturer = product.Manufacturer;
                     existingProduct.Content.ProductPrice = product.ProductPrice;
-
-                    // TODO ProductDuplicationCheck (kolla så där inte redan finns en product med samma Id, och namn)
 
                     await EnsureLoadedAsync(cancellationToken);
                     await _jsonFileRepository.WriteAsync(_products, cancellationToken);
@@ -176,5 +191,31 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         {
             return new ProductResult { Success = false, StatusCode=500, Error = ex.Message };
         }
+    }
+
+    public InputResult ProductNotExistCheck(Product product)
+    {
+        var result = new InputResult();
+        
+        //if (_products.Any(p => p.Id == product.Id && p.ProductName != product.ProductName))
+        if (_products.Any(p => p.Id == product.Id && p != product))
+            result.FieldErrors.Add(new InputError { Field = "ID", Message = "Product ID already exists." });
+        
+        if (_products.Any(p => p.ProductName.Equals(product.ProductName, StringComparison.OrdinalIgnoreCase)))
+            result.FieldErrors.Add(new InputError { Field = "Name", Message = "Product name already exists." });  
+
+        if (result.FieldErrors.Count > 0)
+        {
+            result.Success = false;
+            result.StatusCode = 400;
+            result.Error = "Fields have errors.";
+        }
+        else
+        {
+            result.Success = true;
+            result.StatusCode = 204;
+        }
+
+        return result;
     }
 }
