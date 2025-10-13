@@ -142,7 +142,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                     if (!existingProduct.Content.ProductName.Equals(product.ProductName))
                     {
                         // Check if the new name exists, Returns false if it exists
-                        var existing = ProductNotExistCheck(existingProduct.Content);
+                        var existing = ProductNotExistCheck(product, excludeProductId: product.Id);
                         if (!existing.Success)
                         {
                             return new ProductResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
@@ -193,16 +193,17 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         }
     }
 
-    public InputResult ProductNotExistCheck(Product product)
+    public InputResult ProductNotExistCheck(Product product, string? excludeProductId = null)
     {
         var result = new InputResult();
         
-        //if (_products.Any(p => p.Id == product.Id && p.ProductName != product.ProductName))
-        if (_products.Any(p => p.Id == product.Id && p != product))
+        // ID conflict: if another product (not the excluded id) has the same Id
+        if (!string.IsNullOrWhiteSpace(product.Id) && _products.Any(p => p.Id == product.Id && p.Id != excludeProductId))
             result.FieldErrors.Add(new InputError { Field = "ID", Message = "Product ID already exists." });
-        
-        if (_products.Any(p => p.ProductName.Equals(product.ProductName, StringComparison.OrdinalIgnoreCase)))
-            result.FieldErrors.Add(new InputError { Field = "Name", Message = "Product name already exists." });  
+
+        // Name conflict: case-insensitive, but ignore the product with excludeProductId (so edits don't conflict with itself)
+        if (_products.Any(p => p.ProductName.Equals(product.ProductName, StringComparison.OrdinalIgnoreCase) && p.Id != excludeProductId))
+            result.FieldErrors.Add(new InputError { Field = "Name", Message = "Product name already exists." });
 
         if (result.FieldErrors.Count > 0)
         {
