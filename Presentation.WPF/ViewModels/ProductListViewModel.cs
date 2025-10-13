@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
 namespace Presentation.WPF.ViewModels;
@@ -30,7 +31,7 @@ public partial class ProductListViewModel : ObservableObject
     private string _title = "Product List";
 
     [ObservableProperty]
-    private ObservableCollection<Product> _productList = new();
+    private ObservableCollection<Product> _productList = [];
 
 
     private async Task LoadProductListAsync(CancellationToken cancellationToken = default)
@@ -38,7 +39,13 @@ public partial class ProductListViewModel : ObservableObject
         var productResult = await _productService.GetProductAsync(cancellationToken);
 
         if (productResult.Content != null)
-            ProductList = new ObservableCollection<Product>(productResult.Content);
+        {   // Sort list by name.
+            var sortedList = productResult.Content
+                .OrderBy(p => p.ProductName)
+                .ToList();
+
+            ProductList = new ObservableCollection<Product>(sortedList);
+        }
     }
 
     [RelayCommand]
