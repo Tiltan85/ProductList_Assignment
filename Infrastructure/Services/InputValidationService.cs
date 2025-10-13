@@ -76,6 +76,9 @@ public class InputValidationService : IInputValidationService
         if (productRequest.ProductPrice < 0)
             result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product pricec can't be negative value." });
 
+            else if (string.IsNullOrWhiteSpace(productRequest.ProductPrice.ToString()))
+                result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product pricec can't be ? value." });
+
         if (result.FieldErrors.Count > 0)
         {
             result.Success = false;

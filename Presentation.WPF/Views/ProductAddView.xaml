@@ -26,20 +26,45 @@
                VerticalAlignment="Center"/>
 
         <StackPanel Grid.Row="1">
-            <Label Content="Product Name" />
-            <TextBox Text="{Binding ProductRequestForm.ProductName}" Padding="5" Margin="0 0 0 5" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Product Name" />
+                <TextBlock Text="{Binding FieldErrors[Name], UpdateSourceTrigger=PropertyChanged}" 
+                   Foreground="Red" 
+                   VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBox Text="{Binding ProductEditForm.ProductName, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
 
-            <Label Content="Product Price (SEK)" />
-            <TextBox Text="{Binding ProductRequestForm.ProductPrice}" Padding="5" Margin="0 0 0 5" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Product Price" />
+                <TextBlock Text="{Binding FieldErrors[Price], UpdateSourceTrigger=PropertyChanged}" 
+                   Foreground="Red" 
+                   VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBox Text="{Binding ProductEditForm.ProductPrice, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
 
-            <Label Content="Product Description" />
-            <TextBox Text="{Binding ProductRequestForm.ProductDescription}" Padding="5" Margin="0 0 0 5" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Product Description" />
+                <TextBlock Text="{Binding FieldErrors[Description], UpdateSourceTrigger=PropertyChanged}" 
+                   Foreground="Red" 
+                   VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBox Text="{Binding ProductEditForm.ProductDescription, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
 
-            <Label Content="Product Category" />
-            <TextBox Text="{Binding ProductRequestForm.Category}" Padding="5" Margin="0 0 0 5" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Product Category" />
+                <TextBlock Text="{Binding FieldErrors[Category], UpdateSourceTrigger=PropertyChanged}" 
+                   Foreground="Red" 
+                   VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBox Text="{Binding ProductEditForm.Category.CategoryName, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
 
-            <Label Content="Product Manufacturer" />
-            <TextBox Text="{Binding ProductRequestForm.Manufacturer}" Padding="5" Margin="0 0 0 5" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Product Manufacturer" />
+                <TextBlock Text="{Binding FieldErrors[Manufacturer], UpdateSourceTrigger=PropertyChanged}" 
+                   Foreground="Red" 
+                   VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBox Text="{Binding ProductEditForm.Manufacturer.ManufacturerName, UpdateSourceTrigger=PropertyChanged}" Padding="5" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">

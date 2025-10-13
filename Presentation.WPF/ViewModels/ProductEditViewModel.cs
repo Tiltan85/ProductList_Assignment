@@ -16,6 +16,15 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     private string _title = "Edit Product";
 
     [ObservableProperty]
+    private List<InputError> _errorMessages = [];
+
+    [ObservableProperty]
+    private Dictionary<string, string> _fieldErrors = new();
+
+    [ObservableProperty]
+    private string? _productNameError;
+
+    [ObservableProperty]
     private Product _productEditForm = new();
 
     public void SetProduct(Product product)
@@ -44,7 +53,11 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
         }
 
-        //TODO Error message
+
+        FieldErrors = productResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
+
+        //ProductNameError = productResult.FieldErrors;
+        ErrorMessages = productResult.FieldErrors;
     }
 
 
