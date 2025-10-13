@@ -53,6 +53,7 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     {
         ProductEditForm = new();
         FieldErrors.Clear();
+
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
     }

@@ -92,7 +92,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         {
             try
             {
-                // EnsureLoaded efter kontroll om giltig input
+                // EnsureLoaded efter kontroll om giltig input. Onödigt att hämta om man har fel i formuläret
                 await EnsureLoadedAsync(cancellationToken);
 
                 var product = new Product

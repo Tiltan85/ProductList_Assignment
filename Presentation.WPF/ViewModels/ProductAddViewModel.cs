@@ -16,12 +16,14 @@ public partial class ProductAddViewModel(IServiceProvider serviceProvider, IProd
     private string _title = "New Product";
 
     [ObservableProperty]
+    private Dictionary<string, string> _fieldErrors = [];
+
+    [ObservableProperty]
     private ProductRequest _productRequestForm = new();
 
     [RelayCommand]
     private async Task Save()
     {
-
         var productResult = await _productService.SaveProductAsync(ProductRequestForm);
 
         if (productResult.Success) 
@@ -31,13 +33,14 @@ public partial class ProductAddViewModel(IServiceProvider serviceProvider, IProd
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
         }
+        FieldErrors = productResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
     }
-
 
     [RelayCommand]
     private void Cancel()
     {
         ProductRequestForm = new();
+        FieldErrors.Clear();
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
