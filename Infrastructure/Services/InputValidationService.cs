@@ -49,7 +49,6 @@ public class InputValidationService : IInputValidationService
 
         return result;
     }
-
     public InputResult VerifyProductForm(ProductRequest productRequest)
     {
         var result = new InputResult();
@@ -67,17 +66,17 @@ public class InputValidationService : IInputValidationService
         if (string.IsNullOrWhiteSpace(productRequest.ProductDescription))
             result.FieldErrors.Add(new InputError { Field = "Description", Message = "Product description can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(productRequest.Category))
+        if (string.IsNullOrWhiteSpace(productRequest.Category.CategoryName))
             result.FieldErrors.Add(new InputError { Field = "Category", Message = "Product category can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(productRequest.Manufacturer))
+        if (string.IsNullOrWhiteSpace(productRequest.Manufacturer.ManufacturerName))
             result.FieldErrors.Add(new InputError { Field = "Manufacturer", Message = "Product manufacturer can't be empty." });
 
         if (productRequest.ProductPrice < 0)
             result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product pricec can't be negative value." });
 
             else if (string.IsNullOrWhiteSpace(productRequest.ProductPrice.ToString()))
-                result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product pricec can't be ? value." });
+                result.FieldErrors.Add(new InputError { Field = "Price", Message = "Product price can't be ? value." });
 
         if (result.FieldErrors.Count > 0)
         {

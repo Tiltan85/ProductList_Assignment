@@ -26,6 +26,7 @@
             VerticalAlignment="Center"/>
 
         <StackPanel Grid.Row="1">
+            <TextBlock Text="{Binding Error}" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Product Name" />
                 <TextBlock Text="{Binding FieldErrors[Name], UpdateSourceTrigger=PropertyChanged}" 
