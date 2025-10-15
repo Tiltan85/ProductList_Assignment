@@ -51,7 +51,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         if (product == null)
             return new ServiceObjectResult<Product>
             {
-                Success = true,
+                Success = false,
                 StatusCode = 404,
                 Error = "Product Not Found"
             };
@@ -71,7 +71,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
         if (product == null)
             return new ServiceObjectResult<Product> 
-            {   Success = true, 
+            {   Success = false, 
                 StatusCode = 404, // 404 Not Found
                 Error = "Product Not Found" 
             };
