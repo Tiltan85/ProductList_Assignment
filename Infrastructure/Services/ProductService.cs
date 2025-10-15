@@ -127,7 +127,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
 
     public async Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
     {
-        // Check if Edit for is valid
+        // Check if Edit form is valid
         var result = _inputValidationService.VerifyProductForm(product);
 
         if (result.Success)
