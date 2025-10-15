@@ -122,7 +122,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                 return new ServiceResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
-        return new ServiceResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors };
+        return result;
     }
 
     public async Task<ServiceResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
@@ -168,8 +168,8 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                 return new ServiceResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
-        
-        return new ServiceResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors};
+
+        return result;
     }
 
     public async Task<ServiceResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
