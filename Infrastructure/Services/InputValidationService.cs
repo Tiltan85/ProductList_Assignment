@@ -26,10 +26,10 @@ public class InputValidationService : IInputValidationService
         if (string.IsNullOrWhiteSpace(product.ProductDescription))
             result.FieldErrors.Add(new InputError { Field = "Description", Message = "Product description can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(product.Category.CategoryName))
+        if (product.Category == null || string.IsNullOrWhiteSpace(product.Category.CategoryName))
             result.FieldErrors.Add(new InputError { Field = "Category", Message = "Product category can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(product.Manufacturer.ManufacturerName))
+        if (product.Manufacturer == null || string.IsNullOrWhiteSpace(product.Manufacturer.ManufacturerName))
             result.FieldErrors.Add(new InputError { Field = "Manufacturer", Message = "Product manufacturer can't be empty." });
 
         if (product.ProductPrice < 0)
@@ -66,10 +66,10 @@ public class InputValidationService : IInputValidationService
         if (string.IsNullOrWhiteSpace(productRequest.ProductDescription))
             result.FieldErrors.Add(new InputError { Field = "Description", Message = "Product description can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(productRequest.Category.CategoryName))
+        if (productRequest.Category == null || string.IsNullOrWhiteSpace(productRequest.Category.CategoryName))
             result.FieldErrors.Add(new InputError { Field = "Category", Message = "Product category can't be empty." });
 
-        if (string.IsNullOrWhiteSpace(productRequest.Manufacturer.ManufacturerName))
+        if (productRequest.Manufacturer == null || string.IsNullOrWhiteSpace(productRequest.Manufacturer.ManufacturerName))
             result.FieldErrors.Add(new InputError { Field = "Manufacturer", Message = "Product manufacturer can't be empty." });
 
         if (productRequest.ProductPrice < 0)
