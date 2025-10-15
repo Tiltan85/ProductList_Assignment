@@ -1,12 +1,13 @@
 ﻿using Infrastructure.Models;
 using Infrastructure.Services;
+using Presentation.ConsoleApp.Dialogues;
 
 namespace Presentation.ConsoleApp;
 
-internal class MainDialog(IProductService productService)
+internal class MainDialog(IDialogService dialogService)
 {
 
-    private readonly IProductService _productService = productService;
+    private readonly IDialogService _dialogService = dialogService;
 
     public async Task Show()
     {
@@ -25,11 +26,11 @@ internal class MainDialog(IProductService productService)
             switch (option) 
             {
                 case "1":                    
-                    await ViewProductListDialog();
+                    await _dialogService.ViewProductListDialog();
                     break;
 
                 case "2":
-                    await AddProductDialog(); 
+                    await _dialogService.AddProductDialog(); 
                     break;
 
                 case "3":
