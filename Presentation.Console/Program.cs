@@ -1,4 +1,5 @@
-﻿using Infrastructure.Repositories;
+﻿using Infrastructure.Interfaces;
+using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ IHost host = Host.CreateDefaultBuilder()
     {
         services.AddSingleton<IJsonFileRepository>(new JsonFileRepository("products.json"));
         services.AddSingleton<IProductService, ProductService>();
+        services.AddSingleton<IInputValidationService, InputValidationService>();
 
         services.AddSingleton<MainDialog>();
     })
