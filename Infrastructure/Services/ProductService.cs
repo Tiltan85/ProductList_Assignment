@@ -7,12 +7,12 @@ namespace Infrastructure.Services;
 
 public interface IProductService
 {
-    Task<ProductObjectResult<IReadOnlyList<Product>>> GetProductAsync(CancellationToken cancellationToken = default);
-    Task<ProductObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default);
-    Task<ProductObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default);
-    Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default);
-    Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default);
-    Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default);
+    Task<ServiceObjectResult<IReadOnlyList<Product>>> GetProductAsync(CancellationToken cancellationToken = default);
+    Task<ServiceObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default);
+    Task<ServiceObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default);
+    Task<ServiceResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default);
+    Task<ServiceResult> EditProductAsync(Product product, CancellationToken cancellationToken = default);
+    Task<ServiceResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default);
 }
 
 public class ProductService(IJsonFileRepository jsonFileRepository, IInputValidationService inputValidationService) : IProductService
@@ -32,10 +32,10 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         _loaded = true;
     }
 
-    public async Task<ProductObjectResult<IReadOnlyList<Product>>> GetProductAsync(CancellationToken cancellationToken = default)
+    public async Task<ServiceObjectResult<IReadOnlyList<Product>>> GetProductAsync(CancellationToken cancellationToken = default)
     {
         await EnsureLoadedAsync(cancellationToken);
-        return new ProductObjectResult<IReadOnlyList<Product>>
+        return new ServiceObjectResult<IReadOnlyList<Product>>
         {
             Success = true,
             StatusCode = 200,
@@ -43,20 +43,20 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         };
     }
 
-    public async Task<ProductObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default)
+    public async Task<ServiceObjectResult<Product>> GetProductByIdAsync(string productId, CancellationToken cancellationToken = default)
     {
         await EnsureLoadedAsync(cancellationToken);
         var product = _products.FirstOrDefault(product => product.Id == productId);
 
         if (product == null)
-            return new ProductObjectResult<Product>
+            return new ServiceObjectResult<Product>
             {
                 Success = true,
                 StatusCode = 404,
                 Error = "Product Not Found"
             };
 
-        return new ProductObjectResult<Product>
+        return new ServiceObjectResult<Product>
         {
             Success = true,
             StatusCode = 200,
@@ -64,19 +64,19 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         };
     }
 
-    public async Task<ProductObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default)
+    public async Task<ServiceObjectResult<Product>> GetProductByNameAsync(string productName, CancellationToken cancellationToken = default)
     {
         await EnsureLoadedAsync(cancellationToken);
         var product = _products.FirstOrDefault(product => product.ProductName == productName);
 
         if (product == null)
-            return new ProductObjectResult<Product> 
+            return new ServiceObjectResult<Product> 
             {   Success = true, 
                 StatusCode = 404, // 404 Not Found
                 Error = "Product Not Found" 
             };
 
-        return new ProductObjectResult<Product>
+        return new ServiceObjectResult<Product>
         {
             Success = true,
             StatusCode = 200, // Allt gick som det ska, skickar tillbaka produkt
@@ -84,7 +84,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
         };
     }
 
-    public async Task<ProductResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default)
+    public async Task<ServiceResult> SaveProductAsync(ProductRequest productRequest, CancellationToken cancellationToken = default)
     {
         var result = _inputValidationService.VerifyProductForm(productRequest);
 
@@ -109,23 +109,23 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                 var existing = ProductNotExistCheck(product);
                 if (!existing.Success)
                 {
-                    return new ProductResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
+                    return new ServiceResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
                 }
                 
                 _products.Add(product);
                 await _jsonFileRepository.WriteAsync(_products, cancellationToken);
 
-                return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
+                return new ServiceResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
             }
             catch (Exception ex)
             {
-                return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
+                return new ServiceResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
-        return new ProductResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors };
+        return new ServiceResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors };
     }
 
-    public async Task<ProductResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
+    public async Task<ServiceResult> EditProductAsync(Product product, CancellationToken cancellationToken = default)
     {
         // Check if Edit form is valid
         var result = _inputValidationService.VerifyProductForm(product);
@@ -145,7 +145,7 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                         var existing = ProductNotExistCheck(product, excludeProductId: product.Id);
                         if (!existing.Success)
                         {
-                            return new ProductResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
+                            return new ServiceResult { Success = false, StatusCode = existing.StatusCode, Error = existing.Error, FieldErrors = existing.FieldErrors };
                         }
                     }
 
@@ -158,25 +158,25 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
                     await EnsureLoadedAsync(cancellationToken);
                     await _jsonFileRepository.WriteAsync(_products, cancellationToken);
 
-                    return new ProductResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
+                    return new ServiceResult { Success = true, StatusCode = 204 }; // 204 Allt gick som det ska, skickar inte tillbaka något
                 }
-                return new ProductResult { Success = false, StatusCode = 404, Error = "Product not found" };
+                return new ServiceResult { Success = false, StatusCode = 404, Error = "Product not found" };
 
             }
             catch (Exception ex)
             {
-                return new ProductResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
+                return new ServiceResult { Success = false, StatusCode = 500, Error = ex.Message }; // 500 generellt felmeddelande.
             }
         }
         
-        return new ProductResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors};
+        return new ServiceResult { Success = false, StatusCode = result.StatusCode, Error = result.Error, FieldErrors = result.FieldErrors};
     }
 
-    public async Task<ProductResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
+    public async Task<ServiceResult> DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
     {
         if (product == null) 
         {
-            return new ProductResult { Success = false, StatusCode = 500, Error = "Product not found" };
+            return new ServiceResult { Success = false, StatusCode = 500, Error = "Product not found" };
         }
 
         try
@@ -185,17 +185,17 @@ public class ProductService(IJsonFileRepository jsonFileRepository, IInputValida
             //_products.Remove(product);
             await _jsonFileRepository.WriteAsync(_products, cancellationToken);
 
-            return new ProductResult { Success = true, StatusCode = 200 };
+            return new ServiceResult { Success = true, StatusCode = 200 };
         }
         catch (Exception ex) 
         {
-            return new ProductResult { Success = false, StatusCode=500, Error = ex.Message };
+            return new ServiceResult { Success = false, StatusCode=500, Error = ex.Message };
         }
     }
 
-    public InputResult ProductNotExistCheck(Product product, string? excludeProductId = null)
+    public ServiceResult ProductNotExistCheck(Product product, string? excludeProductId = null)
     {
-        var result = new InputResult();
+        var result = new ServiceResult();
         
         // ID conflict: if another product (not the excluded id) has the same Id
         if (!string.IsNullOrWhiteSpace(product.Id) && _products.Any(p => p.Id == product.Id && p.Id != excludeProductId))

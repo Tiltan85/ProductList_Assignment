@@ -36,11 +36,11 @@ public partial class ProductListViewModel : ObservableObject
 
     private async Task LoadProductListAsync(CancellationToken cancellationToken = default)
     {
-        var productResult = await _productService.GetProductAsync(cancellationToken);
+        var ServiceResult = await _productService.GetProductAsync(cancellationToken);
 
-        if (productResult.Content != null)
+        if (ServiceResult.Content != null)
         {   // Sort list by name.
-            var sortedList = productResult.Content
+            var sortedList = ServiceResult.Content
                 .OrderBy(p => p.ProductName)
                 .ToList();
 
@@ -65,7 +65,7 @@ public partial class ProductListViewModel : ObservableObject
         System.Diagnostics.Debug.WriteLine($"DeleteProductAsync called. product = {(product == null ? "null" : product.Id)}");
         if (product == null) return;
 
-        var productResult = await _productService.DeleteProductAsync(product, cancellationToken);
+        var ServiceResult = await _productService.DeleteProductAsync(product, cancellationToken);
         // TODO Error message if fail
         await LoadProductListAsync (cancellationToken);
     }
