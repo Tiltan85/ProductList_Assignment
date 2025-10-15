@@ -6,9 +6,9 @@ namespace Infrastructure.Services;
 
 public class InputValidationService : IInputValidationService
 {
-    public InputResult VerifyProductForm(Product product)
+    public ServiceResult VerifyProductForm(Product product)
     {
-        var result = new InputResult();
+        var result = new ServiceResult();
 
         if (product == null)
         {
@@ -49,9 +49,9 @@ public class InputValidationService : IInputValidationService
 
         return result;
     }
-    public InputResult VerifyProductForm(ProductRequest productRequest)
+    public ServiceResult VerifyProductForm(ProductRequest productRequest)
     {
-        var result = new InputResult();
+        var result = new ServiceResult();
 
         if (productRequest == null)
         {

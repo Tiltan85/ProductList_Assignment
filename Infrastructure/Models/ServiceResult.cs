@@ -1,7 +1,7 @@
 ﻿
 namespace Infrastructure.Models;
 
-public class InputResult
+public class ServiceResult
 {
     public bool Success { get; set; }
     public int StatusCode { get; set; }
