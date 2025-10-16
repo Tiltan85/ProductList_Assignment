@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Presentation.WPF.Views.ProductPresentationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Presentation.WPF.Views"
+             
+             xmlns:models="clr-namespace:Infrastructure.Models;assembly=Infrastructure"
+             xmlns:viewmodels="clr-namespace:Presentation.WPF.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ProductPresentationViewModel}"
+             
+             mc:Ignorable="d" 
+             Background="White"
+             d:DesignHeight="500" d:DesignWidth="400">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   Text="Product Details" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Margin="0,0,0,10"/>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="Product Name:" FontWeight="SemiBold" Padding="0 0 5 0"/>
+            <TextBlock Text="{Binding ProductName, FallbackValue=PRODUCT Name}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Product Price:" FontWeight="SemiBold" Padding="0 0 5 0"/>
+            <TextBlock Text="{Binding ProductPrice}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <TextBlock Text="Product Category:" FontWeight="SemiBold" Padding="0 0 5 0"/>
+            <TextBlock Text="{Binding ProductCategory, FallbackValue=PRODUCT Category}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <TextBlock Text="Product Manufacturer:" FontWeight="SemiBold" Padding="0 0 5 0"/>
+            <TextBlock Text="{Binding ProductCategory, FallbackValue=PRODUCT Manufacturer}" Padding="0 0 5 0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <TextBlock Text="Description:" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding ProductDescription}" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
