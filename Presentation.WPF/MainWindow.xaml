@@ -43,7 +43,7 @@
             
 
             <!-- Right side: All views (Add/Edit/View) -->
-            <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}">
+            <ContentControl Grid.Column="1" Content="{Binding RightViewModel}">
                 <ContentControl.Resources>
 
                     <DataTemplate DataType="{x:Type viewmodels:ProductDefaultViewModel}">

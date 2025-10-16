@@ -19,38 +19,48 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" 
-                   Text="Product Details" 
+                   Text="{Binding Title}" 
                    FontSize="20" 
                    FontWeight="Bold" 
                    Margin="0,0,0,10"/>
         
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock Text="Product Name:" FontWeight="SemiBold" Padding="0 0 5 0"/>
-            <TextBlock Text="{Binding ProductName, FallbackValue=PRODUCT Name}"/>
+            <TextBlock Text="{Binding SelectedProduct.ProductName, FallbackValue=PRODUCT Name}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock Text="Product Price:" FontWeight="SemiBold" Padding="0 0 5 0"/>
-            <TextBlock Text="{Binding ProductPrice}"/>
+            <TextBlock Text="{Binding SelectedProduct.ProductPrice}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <TextBlock Text="Product Category:" FontWeight="SemiBold" Padding="0 0 5 0"/>
-            <TextBlock Text="{Binding ProductCategory, FallbackValue=PRODUCT Category}"/>
+            <TextBlock Text="{Binding SelectedProduct.Category.CategoryName, FallbackValue=PRODUCT Category}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <TextBlock Text="Product Manufacturer:" FontWeight="SemiBold" Padding="0 0 5 0"/>
-            <TextBlock Text="{Binding ProductCategory, FallbackValue=PRODUCT Manufacturer}" Padding="0 0 5 0"/>
+            <TextBlock Text="{Binding SelectedProduct.Manufacturer.ManufacturerName, FallbackValue=PRODUCT Manufacturer}" Padding="0 0 5 0"/>
         </StackPanel>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal">
             <TextBlock Text="Description:" FontWeight="SemiBold"/>
-            <TextBlock Text="{Binding ProductDescription}" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding SelectedProduct.ProductDescription}" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="6">
+            <Button Content="Edit" 
+                    CommandParameter="{Binding SelectedProduct}"
+                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            <Button Content="Delete" 
+                    CommandParameter="{Binding SelectedProduct}"
+                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -46,7 +46,7 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
             ProductEditForm = new();
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+            mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductDefaultViewModel>();
         }
         Error = editResult.Error;
         FieldErrors = editResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
@@ -59,6 +59,6 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
         FieldErrors.Clear();
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+        mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductDefaultViewModel>();
     }
 }

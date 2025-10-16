@@ -11,7 +11,7 @@
              
              mc:Ignorable="d" 
              Background="White"
-             d:DesignHeight="500" d:DesignWidth="400">
+             d:DesignHeight="500" d:DesignWidth="350">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -31,42 +31,38 @@
                    VerticalAlignment="Center"/>
             <Button Grid.Column="1" 
                     Command="{Binding NavigateToAddViewCommand}"
-                    Content="+" 
+                    Content="Add Product" 
                     Padding="15 5" 
-                    FontSize="22"
+                    FontSize="18"
                     HorizontalAlignment="Right"/>
         </Grid>
 
         <ListView Grid.Row="1" ItemsSource="{Binding ProductList}" HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:Product}">
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    <Button Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding .}" 
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="5"
+                            HorizontalContentAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ProductName}" FontWeight="Bold" />
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ProductPrice}" />
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Category.CategoryName}" />
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Manufacturer.ManufacturerName}" />
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
-
-                        <StackPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Right" >
-                            <Button Content="Edit" 
-                                    CommandParameter="{Binding .}"
-                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                            <Button Content="Delete" 
-                                    CommandParameter="{Binding .}"
-                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                        </StackPanel>
-                    </Grid>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding ProductName}" FontWeight="Bold" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ProductPrice}" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Id}" FontSize="10" Foreground="Gray" />
+                        </Grid>
+                    </Button>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
