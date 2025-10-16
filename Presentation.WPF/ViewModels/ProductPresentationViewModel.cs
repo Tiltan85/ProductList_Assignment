@@ -32,6 +32,8 @@ public partial class ProductPresentationViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<Product> _productList = [];
 
+    [ObservableProperty]
+    private Product _selectedProduct = new();
 
     private async Task LoadProductListAsync(CancellationToken cancellationToken = default)
     {
@@ -46,10 +48,18 @@ public partial class ProductPresentationViewModel : ObservableObject
             ProductList = new ObservableCollection<Product>(sortedList);
         }
     }
-    public ObservableCollection<Product> Products { get; set; } = [];
-    public Product? SelectedProduct { get; set; }
+    public async Task FindProductAsync(Product product)
+    {
+        if (product == null)
+            return;
 
+        var result = await _productService.GetProductByIdAsync(product.Id);
 
+        if (result.Success && result.Content != null)
+        {
+            SelectedProduct = result.Content;
+        }
+    }
 
     [RelayCommand]
     private void Edit(Product product)
@@ -64,8 +74,6 @@ public partial class ProductPresentationViewModel : ObservableObject
     [RelayCommand]
     private async Task Delete(Product product, CancellationToken cancellationToken = default)
     {
-
-        System.Diagnostics.Debug.WriteLine($"DeleteProductAsync called. product = {(product == null ? "null" : product.Id)}");
         if (product == null) return;
 
         var ServiceResult = await _productService.DeleteProductAsync(product, cancellationToken);
