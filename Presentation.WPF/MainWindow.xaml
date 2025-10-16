@@ -11,25 +11,60 @@
         
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="400">
+        Title="MainWindow" Height="650" Width="900">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <ContentControl Content="{Binding CurrentViewModel}">
-            <ContentControl.Resources>
+        <!-- Title -->
+        <Border Background="#2E3B4E" Grid.Row="0" Padding="15">
+            <TextBlock Text="Product Management System"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+        </Border>
 
-                <DataTemplate DataType="{x:Type viewmodels:ProductListViewModel}">
-                    <views:ProductListView />
-                </DataTemplate>
+        <!-- Left side: Product List-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*"    />
+            </Grid.ColumnDefinitions>
 
-                <DataTemplate DataType="{x:Type viewmodels:ProductAddViewModel}">
-                    <views:ProductAddView />
-                </DataTemplate>
-                
-                <DataTemplate DataType="{x:Type viewmodels:ProductEditViewModel}">
-                    <views:ProductEditView />
-                </DataTemplate>
+            <ContentControl Content="{Binding LeftViewModel}" Grid.Row="1">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type viewmodels:ProductListViewModel}">
+                        <views:ProductListView />
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+            
 
-            </ContentControl.Resources> 
-        </ContentControl>
+            <!-- Right side: All views (Add/Edit/View) -->
+            <ContentControl Grid.Column="1" Margin="10"
+                            Content="{Binding CurrentViewModel}">
+                <ContentControl.Resources>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ProductDefaultViewModel}">
+                        <views:ProductDefaultView />
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="{x:Type viewmodels:ProductAddViewModel}">
+                        <views:ProductAddView />
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ProductEditViewModel}">
+                        <views:ProductEditView />
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewmodels:ProductPresentationViewModel}">
+                        <views:ProductPresentationView />
+                    </DataTemplate>
+
+                </ContentControl.Resources>
+            </ContentControl>
+        </Grid>
     </Grid>
 </Window>

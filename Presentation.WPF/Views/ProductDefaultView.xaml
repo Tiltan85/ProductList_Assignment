@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Presentation.WPF.Views.ProductDefaultView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Presentation.WPF.Views"
+             
+             xmlns:models="clr-namespace:Infrastructure.Models;assembly=Infrastructure"
+             xmlns:viewmodels="clr-namespace:Presentation.WPF.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ProductListViewModel}"
+             
+             mc:Ignorable="d" 
+             Background="White"
+             d:DesignHeight="500" d:DesignWidth="400">
+    <Grid>
+        <TextBlock Text="{Binding Message}" 
+                   FontSize="18"
+                   FontStyle="Italic"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>
