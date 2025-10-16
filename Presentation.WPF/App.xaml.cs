@@ -31,8 +31,11 @@ public partial class App : Application
         services.AddTransient<ProductListViewModel>();
         services.AddTransient<ProductListView>();
 
+        services.AddScoped<ProductPresentationViewModel>();
+        services.AddScoped<ProductPresentationView>();
+
         services.AddSingleton<ProductDefaultViewModel>();
-        services.AddTransient<ProductDefaultView>();
+        services.AddSingleton<ProductDefaultView>();
 
     })
     .Build();

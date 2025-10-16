@@ -55,7 +55,7 @@ public partial class ProductListViewModel : ObservableObject
         editViewModel.SetProduct(product);
         
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = editViewModel;
+        mainViewModel.RightViewModel = editViewModel;
     }
 
     [RelayCommand]
@@ -74,6 +74,6 @@ public partial class ProductListViewModel : ObservableObject
     private void NavigateToAddView()
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductAddViewModel>();
+        mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductAddViewModel>();
     }
 }

@@ -34,7 +34,7 @@ public partial class ProductAddViewModel(IServiceProvider serviceProvider, IProd
             ProductRequestForm = new();
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+            mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
         }
         Error = saveResult.Error;
         FieldErrors = saveResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
@@ -47,7 +47,7 @@ public partial class ProductAddViewModel(IServiceProvider serviceProvider, IProd
         FieldErrors.Clear();
 
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+        mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
     }
 
 }
