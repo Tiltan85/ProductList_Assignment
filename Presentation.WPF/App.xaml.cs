@@ -31,6 +31,9 @@ public partial class App : Application
         services.AddTransient<ProductListViewModel>();
         services.AddTransient<ProductListView>();
 
+        services.AddSingleton<ProductDefaultViewModel>();
+        services.AddTransient<ProductDefaultView>();
+
     })
     .Build();
 
@@ -40,9 +43,10 @@ public partial class App : Application
 
         // Sätter upp MainWindow och MainViewModel med Dependency Injection.
         var mainViewModel = host.Services.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = host.Services.GetRequiredService<ProductListViewModel>();
+        mainViewModel.RightViewModel = host.Services.GetRequiredService<ProductDefaultViewModel>();
+        mainViewModel.LeftViewModel = host.Services.GetRequiredService<ProductListViewModel>();
 
-        
+
         var main = host.Services.GetRequiredService<MainWindow>();
         main.DataContext = mainViewModel;
 
