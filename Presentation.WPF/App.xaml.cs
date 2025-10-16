@@ -43,7 +43,7 @@ public partial class App : Application
 
         // Sätter upp MainWindow och MainViewModel med Dependency Injection.
         var mainViewModel = host.Services.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = host.Services.GetRequiredService<ProductDefaultViewModel>();
+        mainViewModel.RightViewModel = host.Services.GetRequiredService<ProductDefaultViewModel>();
         mainViewModel.LeftViewModel = host.Services.GetRequiredService<ProductListViewModel>();
 
 
