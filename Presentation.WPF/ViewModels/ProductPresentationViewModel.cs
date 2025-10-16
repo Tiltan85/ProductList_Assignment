@@ -27,7 +27,7 @@ public partial class ProductPresentationViewModel : ObservableObject
     public IAsyncRelayCommand LoadCommand { get; }
 
     [ObservableProperty]
-    private string _title = "Product List";
+    private string _title = "Product Information";
 
     [ObservableProperty]
     private ObservableCollection<Product> _productList = [];
