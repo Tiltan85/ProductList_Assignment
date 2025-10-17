@@ -30,6 +30,9 @@ public partial class ProductPresentationViewModel : ObservableObject
     private string _title = "Product Information";
 
     [ObservableProperty]
+    private string? _error;
+
+    [ObservableProperty]
     private ObservableCollection<Product> _productList = [];
 
     [ObservableProperty]
@@ -74,10 +77,26 @@ public partial class ProductPresentationViewModel : ObservableObject
     [RelayCommand]
     private async Task Delete(Product product, CancellationToken cancellationToken = default)
     {
+        // safety check returns if product is null
         if (product == null) return;
 
+        // calls the service to delete the product
         var ServiceResult = await _productService.DeleteProductAsync(product, cancellationToken);
-        // TODO Error message if fail
-        await LoadProductListAsync(cancellationToken);
+        if (!ServiceResult.Success)
+        {
+            Error = ServiceResult.Error ?? "Failed to remove product";
+            return;
+        }
+
+        // navigates right view back to default view
+        var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+        mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductDefaultViewModel>();
+
+        // reloads the product list 
+        var listViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+        await listViewModel.LoadCommand.ExecuteAsync(null);
+
+        // updates the left view (list)
+        mainViewModel.LeftViewModel = listViewModel;
     }
 }
