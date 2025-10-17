@@ -26,7 +26,7 @@ namespace Infrastructure.Tests.Services
 
         // Test för att verifiera VerifyProductForm, ska returnera Error om produkten är null
         [Fact]
-        public void VerifyProductForm_ShouldReturnError_WhenProductIsNull()
+        public void VerifyProductForm_Product_ShouldReturnError_WhenProductIsNull()
         {
             // Act
             // Skapar en null-produkt
@@ -40,7 +40,7 @@ namespace Infrastructure.Tests.Services
 
         // Test för att verifiera VerifyProductForm, ska returnera Error om fält saknas
         [Fact]
-        public void VerifyProductForm_ShouldReturnError_WhenFieldsMissing()
+        public void VerifyProductForm_Product_ShouldReturnError_WhenFieldsMissing()
         {
             // Arrange
             // Skapar en produkt med alla fält tomma, priset är 0 som default för decimal
@@ -72,7 +72,7 @@ namespace Infrastructure.Tests.Services
 
         // Test för att verifiera VerifyProductForm, ska returnera Error om priset är negativt
         [Fact]
-        public void VerifyProductForm_ShouldReturnError_WhenPriceNegative()
+        public void VerifyProductForm_Product_ShouldReturnError_WhenPriceNegative()
         {
             // Arrange
             // Skapar en produkt med negativt pris
@@ -98,7 +98,7 @@ namespace Infrastructure.Tests.Services
 
         // Test för att verifiera VerifyProductForm, ska returnera Success om produkten är giltig
         [Fact]
-        public void VerifyProductForm_ShouldReturnSuccess_WhenValid()
+        public void VerifyProductForm_Product_ShouldReturnSuccess_WhenValid()
         {
             // Arrange
             // Skapar en giltig produkt
