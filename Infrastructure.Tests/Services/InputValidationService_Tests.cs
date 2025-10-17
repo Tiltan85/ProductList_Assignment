@@ -43,8 +43,16 @@ namespace Infrastructure.Tests.Services
         public void VerifyProductForm_ShouldReturnError_WhenFieldsMissing()
         {
             // Arrange
-            // Skapar en produkt med alla fält tomma
-            var product = new Product();
+            // Skapar en produkt med alla fält tomma, priset är 0 som default för decimal
+            var product = new Product
+            {
+                Id = "",
+                ProductName = "",
+                ProductDescription = "",
+                Category = new Category { CategoryName = "" },
+                Manufacturer = new Manufacturer { ManufacturerName = "" },
+                ProductPrice = 0
+            };
 
             // Act
             // Verifierar produkten
@@ -53,8 +61,10 @@ namespace Infrastructure.Tests.Services
             // Assert
             Assert.False(result.Success); // Success ska vara false
             Assert.Equal(400, result.StatusCode); // StatusCode ska vara 400
-            Assert.Contains(result.FieldErrors, e => e.Field == "Id"); // Fel på id-fältet
-            Assert.Contains(result.FieldErrors, e => e.Field == "Name"); // Fel på namn-fältet
+            Assert.Equal("Fields have errors.", result.Error); // rätt felmeddelande
+
+            Assert.Contains(result.FieldErrors, e => e.Field == "Id"); // Fel på idfältet
+            Assert.Contains(result.FieldErrors, e => e.Field == "Name"); // Fel på namnfältet
             Assert.Contains(result.FieldErrors, e => e.Field == "Description"); // Fel på beskrivningsfältet
             Assert.Contains(result.FieldErrors, e => e.Field == "Category"); // Fel på kategorifältet
             Assert.Contains(result.FieldErrors, e => e.Field == "Manufacturer"); // Fel på tillverkarfältet
@@ -143,6 +153,8 @@ namespace Infrastructure.Tests.Services
             // Assert
             Assert.False(result.Success); // Success ska vara false
             Assert.Equal(400, result.StatusCode); // StatusCode ska vara 400
+            Assert.Equal("Fields have errors.", result.Error); // rätt felmeddelande
+
             Assert.Contains(result.FieldErrors, e => e.Field == "Name"); // Fel på namnfältet
             Assert.Contains(result.FieldErrors, e => e.Field == "Description"); // Fel på beskrivningsfältet
             Assert.Contains(result.FieldErrors, e => e.Field == "Category"); // Fel på kategorifältet

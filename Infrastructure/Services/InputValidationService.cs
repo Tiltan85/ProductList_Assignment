@@ -17,8 +17,8 @@ public class InputValidationService : IInputValidationService
             result.Error = "Product edit form is empty";
             return result;
         }
-        if (string.IsNullOrWhiteSpace(product.Id))
-            result.FieldErrors.Add(new InputError { Field = "Id", Message = "Product Id is missing, try reload form." });
+        if (product.Id == null || string.IsNullOrWhiteSpace(product.Id))
+            result.FieldErrors.Add(new InputError { Field = "Id", Message = "Product Id is missing." });
 
         if (string.IsNullOrWhiteSpace(product.ProductName))
             result.FieldErrors.Add(new InputError { Field = "Name", Message = "Product name can't be empty." });
