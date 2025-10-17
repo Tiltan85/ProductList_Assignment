@@ -56,9 +56,16 @@
 
         <StackPanel Grid.Row="6">
             <Button Content="Edit" 
+                    Padding="5"
+                    Width="200"
                     CommandParameter="{Binding SelectedProduct}"
                     Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+
+            <Label Content="{Binding Error}" Foreground="Red" />
+
             <Button Content="Delete" 
+                    Padding="5"
+                    Width="200"
                     CommandParameter="{Binding SelectedProduct}"
                     Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
         </StackPanel>

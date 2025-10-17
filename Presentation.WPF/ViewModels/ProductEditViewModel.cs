@@ -43,10 +43,19 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
         var editResult = await _productService.EditProductAsync(ProductEditForm);
         if (editResult.Success)
         {
+            // resets the form
             ProductEditForm = new();
 
+            // navigates back to default view
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductDefaultViewModel>();
+
+            // reloads the product list 
+            var listViewModel = _serviceProvider.GetRequiredService<ProductListViewModel>();
+            await listViewModel.LoadCommand.ExecuteAsync(null);
+
+            // updates the left view (list)
+            mainViewModel.LeftViewModel = listViewModel;
         }
         Error = editResult.Error;
         FieldErrors = editResult.FieldErrors.ToDictionary(e => e.Field, e => e.Message);
@@ -55,9 +64,11 @@ public partial class ProductEditViewModel(IServiceProvider serviceProvider, IPro
     [RelayCommand]
     private void Cancel()
     {
+        // resets the form and error messages
         ProductEditForm = new();
         FieldErrors.Clear();
 
+        // navigate right view back to default
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
         mainViewModel.RightViewModel = _serviceProvider.GetRequiredService<ProductDefaultViewModel>();
     }
