@@ -147,6 +147,7 @@ public class DialogService(IProductService productService) : IDialogService
         Console.WriteLine($"######## {product.ProductName.ToUpper()} ########");
         Console.WriteLine("Product ID:           " + product.Id);
         Console.WriteLine("Product Name:         " + product.ProductName);
+        Console.WriteLine($"Product Price         { product.ProductPrice } sek");
         Console.WriteLine("Product Category:     " + product.Category?.CategoryName);
         Console.WriteLine("Product Description:  " + product.ProductDescription);
         Console.WriteLine("Product Manufacturer: " + product.Manufacturer?.ManufacturerName);
